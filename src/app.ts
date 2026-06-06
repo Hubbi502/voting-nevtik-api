@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import swaggerUi from "swagger-ui-express";
 import { adminRouter } from "./presentation/routes/admin.routes.js";
 import { candidateRouter } from "./presentation/routes/candidate.routes.js";
@@ -11,6 +12,7 @@ const app = express();
 // ============================================
 // Global Middleware
 // ============================================
+app.use(cors());
 app.use(express.json());
 
 // ============================================
