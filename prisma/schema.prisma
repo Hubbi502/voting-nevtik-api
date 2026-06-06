@@ -1,0 +1,34 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Candidate {
+  id        Int      @id @default(autoincrement())
+  name      String
+  vision    String   @db.Text
+  mission   String   @db.Text
+  photoUrl  String?  @map("photo_url")
+  voteCount Int      @default(0) @map("vote_count")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("candidates")
+}
+
+model VotingToken {
+  id        Int       @id @default(autoincrement())
+  token     String    @unique
+  isUsed    Boolean   @default(false) @map("is_used")
+  createdAt DateTime  @default(now()) @map("created_at")
+  usedAt    DateTime? @map("used_at")
+
+  @@map("voting_tokens")
+}
