@@ -3,6 +3,7 @@ export interface CandidateEntity {
   name: string;
   vision: string;
   mission: string;
+  program: string[];
   photoUrl: string | null;
   voteCount: number;
   createdAt: Date;

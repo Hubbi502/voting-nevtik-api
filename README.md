@@ -211,6 +211,10 @@ Semua response API mengikuti format konsisten:
 | `GET` | `/api/admin/tokens` | 🔐 | List token yang belum terpakai |
 | `DELETE` | `/api/admin/tokens/:id` | 🔐 | Hapus token tertentu |
 | `GET` | `/api/candidates` | ❌ | Daftar semua kandidat |
+| `GET` | `/api/candidates/:id` | ❌ | Detail kandidat |
+| `POST` | `/api/candidates` | 🔐 | Tambah kandidat baru |
+| `PUT` | `/api/candidates/:id` | 🔐 | Update data kandidat |
+| `DELETE` | `/api/candidates/:id` | 🔐 | Hapus kandidat |
 | `POST` | `/api/vote` | ❌ | Submit vote dengan token |
 | `GET` | `/api/health` | ❌ | Health check |
 
@@ -376,6 +380,10 @@ GET /api/candidates
         "name": "Ahmad Fadillah",
         "vision": "Mewujudkan organisasi NEVTIK yang inovatif...",
         "mission": "1. Meningkatkan kompetensi anggota...",
+        "program": [
+          "Mengadakan workshop teknologi bulanan",
+          "Membangun lab komputer mini"
+        ],
         "photoUrl": null,
         "voteCount": 5,
         "createdAt": "2026-06-06T09:41:06.004Z",
@@ -384,6 +392,55 @@ GET /api/candidates
     ]
   }
 }
+```
+
+### 5.1 Detail Kandidat
+
+Mengambil detail satu kandidat.
+
+```
+GET /api/candidates/:id
+```
+
+### 5.2 Tambah Kandidat (Admin)
+
+Membuat data kandidat baru.
+
+```
+POST /api/candidates
+Authorization: Bearer <JWT_TOKEN>
+```
+
+**Request Body:**
+```json
+{
+  "name": "Budi Santoso",
+  "vision": "Visi Budi",
+  "mission": "Misi Budi",
+  "program": [
+    "Program kerja utama Budi",
+    "Program kerja kedua Budi"
+  ],
+  "photoUrl": "https://example.com/budi.jpg"
+}
+```
+
+### 5.3 Update Kandidat (Admin)
+
+Memperbarui data kandidat. Bisa mengirimkan data parsial.
+
+```
+PUT /api/candidates/:id
+Authorization: Bearer <JWT_TOKEN>
+```
+
+### 5.4 Hapus Kandidat (Admin)
+
+Menghapus data kandidat berdasarkan ID.
+
+```
+DELETE /api/candidates/:id
+Authorization: Bearer <JWT_TOKEN>
 ```
 
 ---
@@ -554,6 +611,7 @@ Semua error ditangani oleh satu middleware pusat, memastikan:
 | `name` | `VARCHAR` | Nama kandidat |
 | `vision` | `TEXT` | Visi kandidat |
 | `mission` | `TEXT` | Misi kandidat |
+| `program` | `TEXT[]` | Daftar program kerja kandidat |
 | `photo_url` | `VARCHAR` (nullable) | URL foto kandidat |
 | `vote_count` | `INTEGER` (default: 0) | Jumlah vote yang diterima |
 | `created_at` | `TIMESTAMP` | Waktu pembuatan |
@@ -577,6 +635,7 @@ model Candidate {
   name      String
   vision    String   @db.Text
   mission   String   @db.Text
+  program   String[]
   photoUrl  String?  @map("photo_url")
   voteCount Int      @default(0) @map("vote_count")
   createdAt DateTime @default(now()) @map("created_at")

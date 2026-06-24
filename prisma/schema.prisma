@@ -15,6 +15,7 @@ model Candidate {
   name      String
   vision    String   @db.Text
   mission   String   @db.Text
+  program   String[]
   photoUrl  String?  @map("photo_url")
   voteCount Int      @default(0) @map("vote_count")
   createdAt DateTime @default(now()) @map("created_at")
