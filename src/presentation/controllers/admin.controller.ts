@@ -7,8 +7,8 @@ const adminUseCase = new AdminUseCase(new TokenRepositoryImpl());
 export class AdminController {
   static async generateTokens(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const { amount } = req.body;
-      const tokens = await adminUseCase.generateTokens(amount);
+      const { emails } = req.body;
+      const tokens = await adminUseCase.generateTokens(emails);
 
       res.status(201).json({
         success: true,

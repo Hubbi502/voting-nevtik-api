@@ -1,7 +1,7 @@
 import { VotingTokenEntity } from "../entities/token.entity.js";
 
 export interface TokenRepository {
-  createMany(tokens: string[]): Promise<VotingTokenEntity[]>;
+  createMany(tokens: { token: string; email: string; name: string; updated_at: Date }[]): Promise<VotingTokenEntity[]>;
   findByToken(token: string): Promise<VotingTokenEntity | null>;
   findAllUnused(): Promise<VotingTokenEntity[]>;
   deleteById(id: number): Promise<void>;

@@ -13,11 +13,12 @@ interface RawTokenRow {
 }
 
 export class TokenRepositoryImpl implements TokenRepository {
-  async createMany(tokens: string[]): Promise<VotingTokenEntity[]> {
+  async createMany(tokens: { token: string; email: string; name: string; updated_at: Date }[]): Promise<VotingTokenEntity[]> {
     const created = await prisma.votingToken.createManyAndReturn({
-      data: tokens.map((token) => ({ token })),
+      data: tokens,
+      skipDuplicates: true,
     });
-    return created;
+    return created as unknown as VotingTokenEntity[];
   }
 
   async findByToken(token: string): Promise<VotingTokenEntity | null> {

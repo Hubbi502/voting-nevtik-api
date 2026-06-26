@@ -10,19 +10,24 @@ export class AdminUseCase {
    * Generate unique random voting tokens.
    * Each token is a 12-character uppercase alphanumeric string.
    */
-  async generateTokens(amount: number): Promise<VotingTokenEntity[]> {
-    if (amount < 1 || amount > 500) {
+  async generateTokens(emails: string[]): Promise<VotingTokenEntity[]> {
+    if (emails.length < 1 || emails.length > 500) {
       throw new AppError(400, "Jumlah token harus antara 1 dan 500.");
     }
 
-    const tokenSet = new Set<string>();
+    const tokenPayloads: { token: string; email: string; name: string; updated_at: Date }[] = [];
 
-    while (tokenSet.size < amount) {
+    for (const email of emails) {
       const token = crypto.randomBytes(6).toString("hex").toUpperCase();
-      tokenSet.add(token);
+      tokenPayloads.push({
+        token,
+        email,
+        name: email.split("@")[0], // Default name from email
+        updated_at: new Date()
+      });
     }
 
-    return this.tokenRepository.createMany([...tokenSet]);
+    return this.tokenRepository.createMany(tokenPayloads);
   }
 
   /**

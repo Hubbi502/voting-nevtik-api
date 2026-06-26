@@ -17,7 +17,7 @@ const loginSchema = z.object({
 });
 
 const generateTokensSchema = z.object({
-  amount: z.number().int().min(1).max(500, "Maksimal 500 token per request."),
+  emails: z.array(z.string().email("Format email tidak valid")).min(1, "Minimal 1 email diperlukan").max(500, "Maksimal 500 email per request."),
 });
 
 // ============================================
